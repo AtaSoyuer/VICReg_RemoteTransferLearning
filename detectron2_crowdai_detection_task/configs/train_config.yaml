@@ -1,0 +1,44 @@
+_BASE_: "./Base-RCNN-FPN.yaml"
+OUTPUT_DIR: "vicreg_resnet50_imagenet"
+MODEL:
+  #WEIGHTS: '/local/home/bsoyuer/citiies_contrastive_learning/vicreg_pure/vicreg/exp/resnet50_unsupervised_imagenet_converted.pkl'
+  #WEIGHTS: '/local/home/bsoyuer/citiies_contrastive_learning/vicreg_pure/vicreg/exp/resnet50_converted.pkl'
+  #WEIGHTS: "/local/home/bsoyuer/citiies_contrastive_learning/vicreg_pure/vicreg/exp/resnet50_100epochs_16_factor_mixed_converted.pkl"
+  #WEIGHTS: "/local/home/bsoyuer/citiies_contrastive_learning/vicreg_pure/vicreg/exp/resnet50_100epochs_16_factor_mixed_converted.pkl"
+  #WEIGHTS: '/local/home/bsoyuer/citiies_contrastive_learning/vicreg_pure/vicreg/exp/vicreg_no_transfor_longer_d2.pkl'
+  #WEIGHTS: '/local/home/bsoyuer/citiies_contrastive_learning/vicreg_pure/vicreg/exp/vicreg_temporal_200_converted.pkl'
+  #WEIGHTS: '/local/home/bsoyuer/citiies_contrastive_learning/vicreg_pure/vicreg/exp/resnet50_vicreg_sn7_temporal_100_converted.pkl'
+  WEIGHTS: '/local/home/bsoyuer/citiies_contrastive_learning/vicreg_pure/vicreg/exp/resnet50_vicreg_sn7_1000_converted.pkl'
+  MASK_ON: True
+  MASK_ON: True
+  LOAD_PROPOSALS: False
+  PIXEL_MEAN: [123.675, 116.280, 103.530]
+  PIXEL_STD: [58.395, 57.120, 57.375]
+  RESNETS:
+    DEPTH: 50
+    STRIDE_IN_1X1: False
+  BACKBONE:
+    FREEZE_AT: 0
+  ROI_HEADS:
+    NUM_CLASSES: 2  
+INPUT:
+  FORMAT: "RGB"
+DATASETS:
+  TRAIN: ("crowdai_train",)
+  TEST: ("crowdai_val",)
+TEST:
+  #EVAL_PERIOD: 5000
+  EVAL_PERIOD: 15000
+DATALOADER:
+  NUM_WORKERS: 8
+SOLVER:
+  IMS_PER_BATCH: 12
+  BASE_LR: 0.01
+  STEPS: (60000, 80000)
+  MAX_ITER: 90000
+  MOMENTUM: 0.9
+  WEIGHT_DECAY: 0.0001
+  CLIP_GRADIENTS:
+    ENABLED: True
+    CLIP_TYPE: "norm"
+    CLIP_VALUE: 5.0

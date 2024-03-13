@@ -1,0 +1,38 @@
+_BASE_: "./Base-RCNN-FPN.yaml"
+OUTPUT_DIR: "test_bigger_lr"
+MODEL:
+  #WEIGHTS: "pretrained_resnets/imagenet_50.pkl"
+  WEIGHTS: '/local/home/bsoyuer/citiies_contrastive_learning/vicreg_pure/vicreg/exp/resnet50_converted.pkl'
+  MASK_ON: True
+  LOAD_PROPOSALS: False
+  RESNETS:
+    DEPTH: 50
+  BACKBONE:
+    FREEZE_AT: 0
+  ROI_HEADS:
+    NUM_CLASSES: 2  
+DATASETS:
+  TRAIN: ("crowdai_train",)
+  TEST: ("crowdai_val",)
+TEST:
+  EVAL_PERIOD: 5000
+DATALOADER:
+  NUM_WORKERS: 8
+SOLVER:
+  #IMS_PER_BATCH: 10
+  IMS_PER_BATCH: 16    #VICREG PAPER
+  BASE_LR: 0.04
+  STEPS: (60000, 80000)
+  
+  GAMMA: 0.1      #VICREG PAPER
+  
+  WARMUP_ITERS: 1000   #VICREG PAPER
+  
+  MAX_ITER: 90000
+  MOMENTUM: 0.9
+  #WEIGHT_DECAY: 0.0001
+  WEIGHT_DECAY: 0.000001       #VICREG PAPER
+  CLIP_GRADIENTS:
+    ENABLED: True
+    CLIP_TYPE: "norm"
+    CLIP_VALUE: 5.0
